@@ -114,7 +114,7 @@ NSOperationQueue *taskQueue;
         [cookieStr appendString:cookie.value];
         
         if(cookie.expiresDate == nil) {
-            [cookieStr appendString:@"; max-age=0"];
+            [cookieStr appendString:@"; max-age=315360000"];
         }
         else {
             [cookieStr appendString:@"; expires="];
@@ -387,9 +387,11 @@ NSOperationQueue *taskQueue;
         // # 153 get cookies
         if(response.URL != nil)
         {
-            NSArray<NSHTTPCookie *> * cookies = [NSHTTPCookie cookiesWithResponseHeaderFields: headers forURL:response.URL];
+            NSMutableArray<NSHTTPCookie *> * cookies = [NSHTTPCookie cookiesWithResponseHeaderFields: headers forURL:response.URL];
+
             if(cookies != nil && [cookies count] > 0) {
                 [cookiesTable setObject:cookies forKey:response.URL.host];
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:cookies forURL:response.URL mainDocumentURL:NULL];
             }
         }
         
